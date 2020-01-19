@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>Spring tutorials</title>
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="css/custom.css">
+</head>
+<body>
+
+
+
+	<div class="container">
+		<div class="card  text-center">
+			<div class="card-header bg-info ">
+				<h2>Liste des produits</h2>
+			</div>
+			<nav class="navbar navbar-light justify-content-center bg-light">
+				<form class="form-inline" th:action="@{/index}" method="get" >
+					<div class="input-group-prepend">
+						<span class="input-group-text" id="">Mot clé</span>
+					</div>
+					<input class="form-control mr-sm-2" type="text" name="motCle" th:value="${motCle}"
+						 aria-label="Search">
+					<button class="btn btn-outline-info my-2 my-sm-0" type="submit">Search</button>
+				</form>
+			</nav>
+			<div class="card-body">
+
+				<div class="table-responsive">
+					<table class="table table-bordered table-hover">
+
+						<thead>
+							<tr>
+								<th>Id</th>
+								<th>Désignation</th>
+								<th>Prix</th>
+								<th>Quantité</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="p:${listProduit}">
+								<td th:text="${p.id}"></td>
+								<td th:text="${p.designation}"></td>
+								<td th:text="${p.prix}"></td>
+								<td th:text="${p.quantite}"></td>
+								<td>
+								<a onclick="return confirm('Etes vous sûre')" th:href="@{/delete(id=${p.id},page=${currentPage},motCle=${motCle})}" class="badge badge-danger">Delete</a>
+								</td>
+							</tr>
+
+						</tbody>
+					</table>
+
+				</div>
+				<nav aria-label="Page navigation">
+					<ul class="pagination justify-content-center">
+
+						<li th:switch="${currentPage > 0}" class="page-item "><a
+							th:case="${true}" class="page-link "
+							th:href="@{/index(page=${currentPage-1},motCle=${motCle})}">Previous</a></li>
+
+						<li th:each="pages,status:${pages}"
+							th:class="${currentPage==status.index}?'active page-item':'page-item'">
+							<a th:text="${status.index}" class="page-link"
+							th:href=@{/index(page=${status.index},motCle=${motCle})}></a>
+						</li>
+						<li th:switch="${currentPage < maxPages}" class="page-item ">
+							<a th:case="${true}" class="page-link "
+							th:href="@{/index(page=${currentPage+1},motCle=${motCle})}">Next</a>
+						</li>
+
+					</ul>
+				</nav>
+			</div>
+		</div>
+		<!--end of .table-responsive-->
+	</div>
+
+
+</body>
+</html>
